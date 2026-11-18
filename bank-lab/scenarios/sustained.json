@@ -1,0 +1,1 @@
+{"name":"sustained","description":"일정 요청 목표를 유지. 장시간 시험은 --duration으로 명시","parameters":{"scenario":"sustained","duration":60,"users":8,"rps":10,"failure_ratio":0.1,"seed":42}}

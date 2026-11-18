@@ -1,0 +1,34 @@
+name: bank-lab integration
+on:
+  push:
+    paths: ["bank-lab/**", ".github/workflows/bank-lab.yml"]
+  pull_request:
+    paths: ["bank-lab/**", ".github/workflows/bank-lab.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: bank-lab
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/lab.py doctor
+      - run: docker compose config --quiet
+      - run: docker compose build bootstrap
+      - run: python3 scripts/lab.py test
+      - run: docker compose exec -T auth python -m unittest services.bank.test_boundaries -v
+      - run: docker compose exec -T load python -m unittest workloads.test_workloads services.receiver.test_receiver -v
+      - run: python3 scripts/lab.py simulate
+      - if: always()
+        run: python3 scripts/lab.py report
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bank-lab-results
+          path: bank-lab/results/
+      - if: always()
+        run: python3 scripts/lab.py down

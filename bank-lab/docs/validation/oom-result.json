@@ -1,0 +1,32 @@
+{
+  "started_at": "2026-11-17T23:28:28.495810+00:00",
+  "ended_at": "2026-11-17T23:28:30.328627+00:00",
+  "source": "docker_runtime",
+  "expected": {
+    "OOMKilled": true
+  },
+  "actual": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-11-17T23:28:29.438275706Z",
+    "FinishedAt": "2026-11-17T23:28:30.188507092Z",
+    "Health": {
+      "Status": "unhealthy",
+      "FailingStreak": 0,
+      "Log": []
+    }
+  },
+  "limits": {
+    "memory_bytes": 67108864,
+    "swap_bytes": 67108864
+  },
+  "passed": true,
+  "scope": "disposable 64MiB cgroup only; no assertion about collector"
+}

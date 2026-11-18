@@ -1,0 +1,7 @@
+**/__pycache__/
+**/.pytest_cache/
+**/.env
+**/.venv/
+bank-lab/results/*
+!bank-lab/results/.gitkeep
+*.pyc

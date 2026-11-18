@@ -1,0 +1,7 @@
+# Copy to compose.override.yaml only when intentionally changing local capacity.
+# These are lab resource limits, not llooggeerr performance acceptance thresholds.
+services:
+  core:
+    cpus: 1.0
+    mem_limit: 256m
+    memswap_limit: 256m

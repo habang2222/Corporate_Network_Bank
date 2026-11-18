@@ -1,0 +1,1 @@
+{"name":"memory","description":"메모리 제한 이벤트 컨테이너에서 8MiB 할당·페이지 접근 후 해제. OOM 자체 시험은 별도 명령","parameters":{"scenario":"hotspot","focus":"memory","duration":10,"users":1,"rps":2,"failure_ratio":0,"seed":42}}

@@ -1,0 +1,1 @@
+{"name":"disk","description":"16MiB 이하 전용 tmpfs에서 실제 ENOSPC 발생 후 해당 시험 파일만 정리","parameters":{"scenario":"hotspot","focus":"disk","duration":5,"users":1,"rps":1,"failure_ratio":0,"seed":42}}

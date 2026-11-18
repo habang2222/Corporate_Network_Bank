@@ -1,0 +1,1 @@
+{"name":"critical","description":"중요 자원 예시의 권한 작업과 일반 고객·직원 업무 혼합. 수집기의 중요도 정책은 확정하지 않음","parameters":{"scenario":"critical","duration":15,"users":4,"rps":5,"failure_ratio":0.1,"seed":42}}

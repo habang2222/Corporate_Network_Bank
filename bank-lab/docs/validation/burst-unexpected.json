@@ -1,0 +1,74 @@
+[
+  {
+    "run_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42",
+    "operation_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42-00000071",
+    "operation_type": "event_network",
+    "requested_service": "events",
+    "timestamp": "2026-11-17T23:29:13.355611+00:00",
+    "target": "/run",
+    "method": "POST",
+    "attempted": true,
+    "scenario": "burst",
+    "scenario_label": "normal",
+    "phase": "workload",
+    "target_rps": 10.0,
+    "effective_target_rps": 50.0,
+    "user_id": 5,
+    "expected_status": [
+      200
+    ],
+    "request": {
+      "kind": "network",
+      "operation_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42-00000071"
+    },
+    "source": "independent_workload",
+    "record_type": "result",
+    "finished_at": "2026-11-17T23:29:13.466801+00:00",
+    "success": false,
+    "expectation_met": false,
+    "return_code": 429,
+    "error_reason": "one bounded event job is already running",
+    "operation_duration_ms": 111.2186359999896,
+    "latency_ms": 106.88783999989937,
+    "response": {
+      "detail": "one bounded event job is already running"
+    },
+    "actual_completed_so_far": 30
+  },
+  {
+    "run_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42",
+    "operation_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42-00000086",
+    "operation_type": "event_file",
+    "requested_service": "events",
+    "timestamp": "2026-11-17T23:29:13.665211+00:00",
+    "target": "/run",
+    "method": "POST",
+    "attempted": true,
+    "scenario": "burst",
+    "scenario_label": "normal",
+    "phase": "workload",
+    "target_rps": 10.0,
+    "effective_target_rps": 50.0,
+    "user_id": 2,
+    "expected_status": [
+      200
+    ],
+    "request": {
+      "kind": "file",
+      "operation_id": "86afb6d1-9784-4ff0-b11e-5d0612327b42-00000086"
+    },
+    "source": "independent_workload",
+    "record_type": "result",
+    "finished_at": "2026-11-17T23:29:13.747805+00:00",
+    "success": false,
+    "expectation_met": false,
+    "return_code": 429,
+    "error_reason": "one bounded event job is already running",
+    "operation_duration_ms": 82.61761100004605,
+    "latency_ms": 78.7037310000187,
+    "response": {
+      "detail": "one bounded event job is already running"
+    },
+    "actual_completed_so_far": 34
+  }
+]

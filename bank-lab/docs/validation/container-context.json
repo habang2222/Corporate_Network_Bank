@@ -1,0 +1,348 @@
+{
+  "recorded_at": "2026-11-17T23:30:55.452779+00:00",
+  "containers": [
+    {
+      "id": "bf922a38d0aefeef6c83a1cb8859700e81789f2b68ce1a2add9207ba142b2f37",
+      "name": "/llooggeerr-bank-auth-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "auth",
+      "host_pid": 3314,
+      "started_at": "2026-11-17T23:27:05.026450293Z",
+      "cgroup": "0::/system.slice/docker-bf922a38d0aefeef6c83a1cb8859700e81789f2b68ce1a2add9207ba142b2f37.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_api-auth": "172.20.0.2",
+        "llooggeerr-bank_core-auth": "172.27.0.2",
+        "llooggeerr-bank_employee-auth": "172.22.0.2"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "3a8c27feea699c4cdee48fb0b60fe38902cfa1e026a2c5b9487ba39a4c4a97b7",
+      "name": "/llooggeerr-bank-core-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "core",
+      "host_pid": 3595,
+      "started_at": "2026-11-17T23:27:12.177270099Z",
+      "cgroup": "0::/system.slice/docker-3a8c27feea699c4cdee48fb0b60fe38902cfa1e026a2c5b9487ba39a4c4a97b7.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_api-core": "172.25.0.2",
+        "llooggeerr-bank_core-auth": "172.27.0.3",
+        "llooggeerr-bank_core-db": "172.29.0.3",
+        "llooggeerr-bank_core-management": "172.19.0.3",
+        "llooggeerr-bank_employee-core": "172.21.0.2"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "58ea95151ba08c31e9c1cd01685f661e8cf0aa54546171975dbd9a59bee1a51c",
+      "name": "/llooggeerr-bank-customer-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "customer",
+      "host_pid": 3825,
+      "started_at": "2026-11-17T23:27:19.365528977Z",
+      "cgroup": "0::/system.slice/docker-58ea95151ba08c31e9c1cd01685f661e8cf0aa54546171975dbd9a59bee1a51c.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_api-auth": "172.20.0.3",
+        "llooggeerr-bank_api-core": "172.25.0.3",
+        "llooggeerr-bank_dmz-api": "172.23.0.2"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "059704d8cc6c4ae7879c8fe9dd4828567e221492fd0e44972226200ba6fa6ba8",
+      "name": "/llooggeerr-bank-customer-client-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "customer-client",
+      "host_pid": 3034,
+      "started_at": "2026-11-17T23:27:03.651019664Z",
+      "cgroup": "0::/system.slice/docker-059704d8cc6c4ae7879c8fe9dd4828567e221492fd0e44972226200ba6fa6ba8.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_customer-net": "172.28.0.2"
+      },
+      "limits": {
+        "Memory": 100663296,
+        "MemorySwap": 100663296,
+        "NanoCpus": 250000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "7ca244b51e8e6952b5f0b5c58d1630232adab896df75663fc153311dc49d2ae7",
+      "name": "/llooggeerr-bank-db-1",
+      "image": "sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536",
+      "service": "db",
+      "host_pid": 1502,
+      "started_at": "2026-11-17T23:26:44.558122863Z",
+      "cgroup": "0::/system.slice/docker-7ca244b51e8e6952b5f0b5c58d1630232adab896df75663fc153311dc49d2ae7.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_core-db": "172.29.0.2"
+      },
+      "limits": {
+        "Memory": 335544320,
+        "MemorySwap": 335544320,
+        "NanoCpus": 1000000000,
+        "PidsLimit": 80
+      }
+    },
+    {
+      "id": "c16c128aa00ee580542aca85d4da14b4efc96c51d11549e6d3fb61ab8f883322",
+      "name": "/llooggeerr-bank-employee-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "employee",
+      "host_pid": 3826,
+      "started_at": "2026-11-17T23:27:19.362635445Z",
+      "cgroup": "0::/system.slice/docker-c16c128aa00ee580542aca85d4da14b4efc96c51d11549e6d3fb61ab8f883322.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_employee-auth": "172.22.0.3",
+        "llooggeerr-bank_employee-core": "172.21.0.3",
+        "llooggeerr-bank_employee-net": "172.26.0.3"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "63edfc8288f9ea19349d63e1897f55e04c0e39a3d16e2a0aa416a30f6bb5b330",
+      "name": "/llooggeerr-bank-employee-client-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "employee-client",
+      "host_pid": 3041,
+      "started_at": "2026-11-17T23:27:03.6535996Z",
+      "cgroup": "0::/system.slice/docker-63edfc8288f9ea19349d63e1897f55e04c0e39a3d16e2a0aa416a30f6bb5b330.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_employee-net": "172.26.0.2"
+      },
+      "limits": {
+        "Memory": 100663296,
+        "MemorySwap": 100663296,
+        "NanoCpus": 250000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "15d07b1c5aaf4f1afdb60f6e75f3752972a8fcfb9ac5c714f803edc83061de44",
+      "name": "/llooggeerr-bank-events-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "events",
+      "host_pid": 3323,
+      "started_at": "2026-11-17T23:27:05.038507356Z",
+      "cgroup": "0::/system.slice/docker-15d07b1c5aaf4f1afdb60f6e75f3752972a8fcfb9ac5c714f803edc83061de44.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_event-net": "192.168.0.2",
+        "llooggeerr-bank_management": "192.168.16.3"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "972bfa9baabad9be022940c89d7ba6dabbbdd64c8576de7152fc70407dd6e5c9",
+      "name": "/llooggeerr-bank-load-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "load",
+      "host_pid": 4419,
+      "started_at": "2026-11-17T23:27:33.51300538Z",
+      "cgroup": "0::/system.slice/docker-972bfa9baabad9be022940c89d7ba6dabbbdd64c8576de7152fc70407dd6e5c9.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_customer-net": "172.28.0.4",
+        "llooggeerr-bank_employee-net": "172.26.0.4",
+        "llooggeerr-bank_event-net": "192.168.0.3"
+      },
+      "limits": {
+        "Memory": 201326592,
+        "MemorySwap": 201326592,
+        "NanoCpus": 250000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "872c5bec7d7e51cd449a2fd1750adc54a325d660c7ec8a7aa3eab88db39e8b3f",
+      "name": "/llooggeerr-bank-log-forwarder-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "log-forwarder",
+      "host_pid": 3047,
+      "started_at": "2026-11-17T23:27:03.647723432Z",
+      "cgroup": "0::/system.slice/docker-872c5bec7d7e51cd449a2fd1750adc54a325d660c7ec8a7aa3eab88db39e8b3f.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_log-net": "172.31.0.2"
+      },
+      "limits": {
+        "Memory": 100663296,
+        "MemorySwap": 100663296,
+        "NanoCpus": 250000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "79e0b074eafd99fbec86d3892f87a3975c6bfa96933b35d41f85b60a2ddd152a",
+      "name": "/llooggeerr-bank-manager-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "manager",
+      "host_pid": 3324,
+      "started_at": "2026-11-17T23:27:05.032883621Z",
+      "cgroup": "0::/system.slice/docker-79e0b074eafd99fbec86d3892f87a3975c6bfa96933b35d41f85b60a2ddd152a.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_core-management": "172.19.0.2",
+        "llooggeerr-bank_log-control": "172.30.0.2",
+        "llooggeerr-bank_management": "192.168.16.2"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "badd15d38d883e9622583f57b1bc32075cbf4e3136b2ac36e0de7d17bf6a2937",
+      "name": "/llooggeerr-bank-receiver-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "receiver",
+      "host_pid": 3337,
+      "started_at": "2026-11-17T23:27:05.035703453Z",
+      "cgroup": "0::/system.slice/docker-badd15d38d883e9622583f57b1bc32075cbf4e3136b2ac36e0de7d17bf6a2937.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_log-control": "172.30.0.3",
+        "llooggeerr-bank_log-net": "172.31.0.3"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    },
+    {
+      "id": "cfac6a1c1d16b7c8fd250fccf95375dbdb7bd5165ca50a3b1025d2ae57c55551",
+      "name": "/llooggeerr-bank-web-1",
+      "image": "sha256:7236f71b1a527ca73b9934e7b1db6be8fd8c5e22ea7b72463f8c95ea495d7f5c",
+      "service": "web",
+      "host_pid": 4136,
+      "started_at": "2026-11-17T23:27:26.476630281Z",
+      "cgroup": "0::/system.slice/docker-cfac6a1c1d16b7c8fd250fccf95375dbdb7bd5165ca50a3b1025d2ae57c55551.scope\n",
+      "namespaces": {
+        "pid": null,
+        "mnt": null,
+        "net": null,
+        "user": null,
+        "cgroup": null
+      },
+      "networks": {
+        "llooggeerr-bank_customer-net": "172.28.0.3",
+        "llooggeerr-bank_dmz-api": "172.23.0.3",
+        "llooggeerr-bank_web-entry": "192.168.32.2"
+      },
+      "limits": {
+        "Memory": 167772160,
+        "MemorySwap": 167772160,
+        "NanoCpus": 500000000,
+        "PidsLimit": 64
+      }
+    }
+  ]
+}

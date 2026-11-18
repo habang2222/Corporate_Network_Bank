@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-11-16T23:58:43.327713+00:00",
+  "passed": 192,
+  "failed": 1,
+  "failures": [
+    {
+      "name": "load suite execution",
+      "expected": "completed",
+      "actual": "RuntimeError: command failed: docker compose exec -T load python -\nTraceback (most recent call last):\n  File \"<stdin>\", line 125, in <module>\n  File \"<stdin>\", line 91, in execute_run\nRuntimeError: workload exited -15: \n",
+      "passed": false
+    }
+  ],
+  "cause": "not established; not reproduced in subsequent load tests"
+}

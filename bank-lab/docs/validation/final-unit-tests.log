@@ -1,0 +1,71 @@
+/usr/local/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_invalid_and_unicode_credentials_never_authenticate (services.bank.test_boundaries.AuthenticationBoundaries.test_invalid_and_unicode_credentials_never_authenticate) ... {"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958074876245042, "pid": 14}
+{"source": "application", "service": "auth", "event": "authentication_failed", "time_ns": 1794958074893162547, "operation_id": "", "run_id": "", "username": "alice"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958074894122418, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 401, "elapsed_ns": 9744915}
+{"source": "application", "service": "auth", "event": "authentication_failed", "time_ns": 1794958074982200987, "operation_id": "", "run_id": "", "username": "missing"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958074983344376, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 401, "elapsed_ns": 5573270}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958074989162587, "pid": 14}
+ok
+test_repeated_validation_releases_sqlite_connections (services.bank.test_boundaries.AuthenticationBoundaries.test_repeated_validation_releases_sqlite_connections) ... {"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958075075866405, "pid": 14}
+{"source": "application", "service": "auth", "event": "authentication_succeeded", "time_ns": 1794958075089089563, "operation_id": "", "run_id": "", "username": "alice", "role": "customer"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075089824958, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 200, "elapsed_ns": 7496078}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075180042642, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 3903283}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075271980482, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 80070286}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075287394508, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4155436}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075377506813, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4219169}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075389990394, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 5056801}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075479587678, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4742175}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075493063080, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4212098}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075583235147, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 3835810}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075672174785, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 81479538}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075684716199, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4144163}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075772735622, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 79229796}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075788480793, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 5343488}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075881010450, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 3595862}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075973851744, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 81352738}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958075988009648, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4406676}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958075993719184, "pid": 14}
+ok
+test_revocation_is_durable_and_token_is_not_stored_plaintext (services.bank.test_boundaries.AuthenticationBoundaries.test_revocation_is_durable_and_token_is_not_stored_plaintext) ... {"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958076078106675, "pid": 14}
+{"source": "application", "service": "auth", "event": "authentication_succeeded", "time_ns": 1794958076088678353, "operation_id": "", "run_id": "", "username": "alice", "role": "customer"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076089471850, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 200, "elapsed_ns": 6350393}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076178882509, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 200, "elapsed_ns": 4069644}
+{"source": "application", "service": "auth", "event": "logout", "time_ns": 1794958076190836391, "operation_id": "", "run_id": "", "username": "alice"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076191497997, "operation_id": "", "run_id": "", "method": "POST", "path": "/logout", "status": 200, "elapsed_ns": 5000183}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958076275290072, "pid": 14}
+{"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958076284637104, "pid": 14}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076293936054, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 401, "elapsed_ns": 3863296}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958076374837001, "pid": 14}
+ok
+test_validation_error_does_not_echo_password (services.bank.test_boundaries.AuthenticationBoundaries.test_validation_error_does_not_echo_password) ... {"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958076382573900, "pid": 14}
+{"source": "application", "service": "auth", "event": "request_rejected", "time_ns": 1794958076390954657, "operation_id": "", "run_id": "", "path": "/login", "errors": [{"loc": ["body", "unexpected"], "type": "extra_forbidden", "msg": "Extra inputs are not permitted"}]}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076391392352, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 422, "elapsed_ns": 2278946}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958076473365847, "pid": 14}
+ok
+test_validation_requires_internal_key (services.bank.test_boundaries.AuthenticationBoundaries.test_validation_requires_internal_key) ... {"source": "application", "service": "auth", "event": "service_started", "time_ns": 1794958076480902962, "pid": 14}
+{"source": "application", "service": "auth", "event": "authentication_succeeded", "time_ns": 1794958076492250675, "operation_id": "", "run_id": "", "username": "alice", "role": "customer"}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076493255429, "operation_id": "", "run_id": "", "method": "POST", "path": "/login", "status": 200, "elapsed_ns": 6570850}
+{"source": "application", "service": "auth", "event": "http_request", "time_ns": 1794958076583324635, "operation_id": "", "run_id": "", "method": "POST", "path": "/validate", "status": 403, "elapsed_ns": 3069449}
+{"source": "application", "service": "auth", "event": "service_stopped", "time_ns": 1794958076588536567, "pid": 14}
+ok
+test_employee_filename_stays_in_own_directory (services.bank.test_boundaries.InputBoundaries.test_employee_filename_stays_in_own_directory) ... ok
+test_transfer_amount_rejects_floats_booleans_and_numeric_strings (services.bank.test_boundaries.InputBoundaries.test_transfer_amount_rejects_floats_booleans_and_numeric_strings) ... ok
+test_comparison_rejects_different_conditions_and_never_fills_collector_metrics (workloads.test_workloads.WorkloadTests.test_comparison_rejects_different_conditions_and_never_fills_collector_metrics) ... ok
+test_low_filesystem_space_stops_generation (workloads.test_workloads.WorkloadTests.test_low_filesystem_space_stops_generation) ... ok
+test_low_rps_does_not_wait_past_duration (workloads.test_workloads.WorkloadTests.test_low_rps_does_not_wait_past_duration) ... {"run_id": "f062cddd-ef1b-4f5b-8190-fc08d227470c", "summary": "/tmp/tmpzdkjv9b5/results/f062cddd-ef1b-4f5b-8190-fc08d227470c/summary.json", "requests": 1, "actual_rps": 11.973570880681738, "error": null}
+ok
+test_refresh_before_expiry_is_recorded_and_replaces_tokens (workloads.test_workloads.WorkloadTests.test_refresh_before_expiry_is_recorded_and_replaces_tokens) ... ok
+test_seed_reproduces_slot_plan_and_presets_allow_overrides (workloads.test_workloads.WorkloadTests.test_seed_reproduces_slot_plan_and_presets_allow_overrides) ... ok
+test_storage_budget_stops_before_new_work_preserves_truth (workloads.test_workloads.WorkloadTests.test_storage_budget_stops_before_new_work_preserves_truth) ... {"run_id": "1f0b96c0-4d01-4b0a-8ca1-8874cd66d939", "summary": "/tmp/tmpwflk6zrr/results/1f0b96c0-4d01-4b0a-8ca1-8874cd66d939/summary.json", "requests": 0, "actual_rps": 0.0, "error": null}
+ok
+test_concurrent_duplicates_commit_one_unique_event (services.receiver.test_receiver.ReceiverTests.test_concurrent_duplicates_commit_one_unique_event) ... ok
+test_connection_is_closed_after_context_and_errors_rollback (services.receiver.test_receiver.ReceiverTests.test_connection_is_closed_after_context_and_errors_rollback) ... ok
+test_non_ascii_keys_are_unauthorized_not_internal_errors (services.receiver.test_receiver.ReceiverTests.test_non_ascii_keys_are_unauthorized_not_internal_errors) ... ok
+test_received_but_failed_storage_retries_after_recovery (services.receiver.test_receiver.ReceiverTests.test_received_but_failed_storage_retries_after_recovery) ... ok
+test_restart_duplicate_conflict_and_raw_body_preservation (services.receiver.test_receiver.ReceiverTests.test_restart_duplicate_conflict_and_raw_body_preservation) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 4.084s
+
+OK

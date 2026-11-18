@@ -1,0 +1,1 @@
+{"name":"normal","description":"고객·직원·이벤트 작업을 낮은 부하로 혼합","parameters":{"scenario":"normal","duration":15,"users":4,"rps":5,"failure_ratio":0.1,"seed":42}}

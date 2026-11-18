@@ -1,0 +1,1 @@
+{"name":"multi","description":"여러 컨테이너에 동시 고객·직원·전용 이벤트 요청","parameters":{"scenario":"multi","duration":15,"users":6,"rps":8,"failure_ratio":0.1,"seed":42,"user_types":"customer,employee,events"}}
