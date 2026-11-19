@@ -1,1 +1,1 @@
-"""Independent virtual banking services for the llooggeerr laboratory."""
+"""Virtual banking services for a standalone company network."""

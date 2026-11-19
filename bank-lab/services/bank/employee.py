@@ -1,14 +1,9 @@
-"""Role-specific employee workflows with real bounded OS operations."""
-import errno
+"""Role-specific employee workflows."""
 import json
 import os
 from pathlib import Path
 import re
-import socket
-import subprocess
-import sys
 import time
-from typing import Literal
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Request
@@ -33,7 +28,7 @@ def root_for(user: dict) -> Path:
 
 def file_for(user: dict, name: str) -> Path:
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,79}", name):
-        raise HTTPException(422, "filename must be a plain laboratory basename")
+        raise HTTPException(422, "filename must be a plain basename")
     path = root_for(user) / name
     if path.is_symlink():
         raise HTTPException(403, "symbolic links are not permitted")
@@ -46,7 +41,7 @@ def activity(request, user, action, detail):
         return {"recorded": True, **response_data(call(CORE_URL, "POST", "/employee-actions",
                  token=bearer(request), body={"action": action, "detail": detail}))}
     except HTTPException as exc:
-        # The file/OS action may already have completed; do not disguise that as a rollback.
+        # The file action may already have completed; keep its outcome visible.
         audit("employee_audit_failure", username=user["username"], action=action,
               http_status=exc.status_code)
         return {"recorded": False, "http_status": exc.status_code, "reason": "core audit unavailable"}
@@ -146,90 +141,6 @@ def delete_file(name: str, request: Request):
         raise HTTPException(404, "file does not exist") from exc
     return {"filename": name, "deleted": True,
             "audit": activity(request, user, "file_delete", {"filename": name})}
-
-
-class Operation(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-    operation: Literal["file-cycle", "permission-denied", "process", "network"]
-
-
-@router.post("/operations")
-def operation(body: Operation, request: Request):
-    user = identity(request, {"operator"})
-    operation_id = uuid4().hex
-    steps = []
-    target = root_for(user) / ("operation-" + operation_id + ".txt")
-    if body.operation == "file-cycle":
-        renamed = target.with_suffix(".renamed")
-        try:
-            target.write_text("synthetic first version", encoding="utf-8")
-            steps.append({"operation": "create_write", "path": str(target), "return_code": 0})
-            content = target.read_text(encoding="utf-8")
-            steps.append({"operation": "read", "path": str(target), "bytes": len(content), "return_code": 0})
-            with target.open("a", encoding="utf-8") as output:
-                output.write("\nmodified")
-            steps.append({"operation": "write", "path": str(target), "return_code": 0})
-            target.rename(renamed)
-            steps.append({"operation": "rename", "path": str(target), "destination": str(renamed), "return_code": 0})
-            renamed.unlink()
-            steps.append({"operation": "unlink", "path": str(renamed), "return_code": 0})
-        finally:
-            target.unlink(missing_ok=True)
-            renamed.unlink(missing_ok=True)
-    elif body.operation == "permission-denied":
-        target.write_text("synthetic restricted file", encoding="utf-8")
-        try:
-            target.chmod(0o000)
-            steps.append({"operation": "chmod", "path": str(target), "mode": "000", "return_code": 0})
-            try:
-                target.read_bytes()
-                steps.append({"operation": "open_denied", "return_code": 0, "expected": False})
-            except PermissionError as exc:
-                steps.append({"operation": "open_denied", "return_code": -1, "errno": exc.errno,
-                              "expected": exc.errno == errno.EACCES})
-            try:
-                os.chown(target, 0, 0)
-                steps.append({"operation": "chown_denied", "return_code": 0, "expected": False})
-            except PermissionError as exc:
-                steps.append({"operation": "chown_denied", "return_code": -1, "errno": exc.errno,
-                              "expected": exc.errno == errno.EPERM})
-        finally:
-            target.chmod(0o600)
-            target.unlink()
-    elif body.operation == "process":
-        for expected in (0, 7):
-            child = subprocess.run([sys.executable, "-c", "import sys; sys.exit(" + str(expected) + ")"],
-                                   timeout=3, capture_output=True, check=False)
-            steps.append({"operation": "process_exit", "return_code": child.returncode,
-                          "expected_return_code": expected})
-    elif body.operation == "network":
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
-            server.settimeout(2)
-            server.bind(("127.0.0.1", 0))
-            server.listen(1)
-            port = server.getsockname()[1]
-            steps.extend([{"operation": "bind", "port": port, "return_code": 0},
-                          {"operation": "listen", "port": port, "return_code": 0}])
-            with socket.create_connection(("127.0.0.1", port), timeout=2) as client:
-                steps.append({"operation": "connect", "port": port, "return_code": 0})
-                accepted, _ = server.accept()
-                with accepted:
-                    client.sendall(b"lab")
-                    accepted.recv(3)
-                steps.append({"operation": "accept", "port": port, "return_code": 0})
-        try:
-            with socket.create_connection(("127.0.0.1", port), timeout=0.5):
-                steps.append({"operation": "connect_failure", "return_code": 0, "expected": False})
-        except OSError as exc:
-            steps.append({"operation": "connect_failure", "return_code": -1, "errno": exc.errno,
-                          "expected": exc.errno == errno.ECONNREFUSED})
-    result = {"operation_id": operation_id, "operation": body.operation, "steps": steps,
-              "source": "workload_os_results", "pid": os.getpid(),
-              "all_expected": all(step.get("expected", True) and
-                  step.get("return_code") == step.get("expected_return_code", step.get("return_code"))
-                  for step in steps)}
-    result["audit"] = activity(request, user, "operation_" + body.operation, result.copy())
-    return result
 
 
 @router.post("/admin/accounts")

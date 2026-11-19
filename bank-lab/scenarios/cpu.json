@@ -1,1 +1,0 @@
-{"name":"cpu","description":"CPU 제한 이벤트 컨테이너에서 요청당 0.25초 압박. 한 번에 1작업만 허용","parameters":{"scenario":"hotspot","focus":"cpu","duration":10,"users":1,"rps":2,"failure_ratio":0,"seed":42}}

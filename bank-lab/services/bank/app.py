@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from .common import CORRELATION, DATA, ROLE, audit
 
-if ROLE not in {"auth", "customer", "core", "employee"}:
+if ROLE not in {"auth", "customer", "core", "employee", "office"}:
     raise RuntimeError("unknown SERVICE_ROLE")
 service = importlib.import_module("services.bank." + ROLE)
 
@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
     audit("service_stopped", pid=os.getpid())
 
 
-app = FastAPI(title="llooggeerr synthetic bank: " + ROLE,
+app = FastAPI(title="company bank: " + ROLE,
               docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 app.include_router(service.router)
 

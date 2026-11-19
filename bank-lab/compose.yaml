@@ -1,7 +1,7 @@
-name: llooggeerr-bank
+name: ${COMPOSE_PROJECT_NAME:-company-bank}
 
 x-app: &app
-  image: llooggeerr-bank-app:local
+  image: company-bank-app:local
   build: .
   user: "10001:10001"
   init: true
@@ -14,27 +14,13 @@ x-app: &app
   memswap_limit: 160m
   pids_limit: 64
   tmpfs: ["/tmp:size=16m,mode=1777"]
-  logging:
-    driver: local
-    options: {max-size: "5m", max-file: "2"}
+  logging: {driver: local, options: {max-size: "5m", max-file: "2"}}
   healthcheck:
     test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)"]
     interval: 10s
     timeout: 3s
     retries: 12
     start_period: 20s
-
-x-idle: &idle
-  <<: *app
-  command: [python, -c, "import time; time.sleep(2147483647)"]
-  cpus: 0.25
-  mem_limit: 96m
-  memswap_limit: 96m
-  healthcheck:
-    test: [CMD, python, -c, "import os; os.kill(1, 0)"]
-    interval: 10s
-    timeout: 3s
-    retries: 3
 
 services:
   bootstrap:
@@ -44,22 +30,15 @@ services:
     network_mode: none
     volumes: [secrets:/secrets]
     healthcheck: {disable: true}
-    mem_limit: 64m
-    memswap_limit: 64m
 
   db:
     image: postgres:17-bookworm@sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536
     restart: unless-stopped
-    environment:
-      POSTGRES_USER: bank
-      POSTGRES_DB: bank
-      POSTGRES_PASSWORD_FILE: /secrets/db-password
-      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    environment: {POSTGRES_USER: bank, POSTGRES_DB: bank, POSTGRES_PASSWORD_FILE: /secrets/db-password, POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"}
     command: [postgres, -c, shared_buffers=64MB, -c, max_connections=40, -c, log_connections=on, -c, log_disconnections=on]
     volumes: [db-data:/var/lib/postgresql/data, secrets:/secrets:ro]
     networks: [core-db]
-    depends_on:
-      bootstrap: {condition: service_completed_successfully}
+    depends_on: {bootstrap: {condition: service_completed_successfully}}
     cpus: 1.0
     mem_limit: 320m
     memswap_limit: 320m
@@ -72,142 +51,89 @@ services:
       timeout: 3s
       retries: 20
 
+  security:
+    <<: *app
+    command: [python, -m, uvicorn, services.security.app:app, --host, 0.0.0.0, --port, "8080"]
+    volumes: [secrets:/secrets:ro, security-data:/data]
+    networks: [edge-web, dmz-api, customer-backend, staff-net, staff-auth, staff-core]
+    depends_on: {bootstrap: {condition: service_completed_successfully}}
+
   auth:
     <<: *app
-    environment: {SERVICE_ROLE: auth}
+    environment: {SERVICE_ROLE: auth, AUDIT_URL: "http://security:8080"}
     volumes: [secrets:/secrets:ro, auth-data:/data]
-    networks: [api-auth, employee-auth, core-auth]
-    depends_on:
-      bootstrap: {condition: service_completed_successfully}
+    networks: [customer-backend, staff-auth]
+    depends_on: {security: {condition: service_healthy}}
 
   core:
     <<: *app
-    environment: {SERVICE_ROLE: core, DATABASE_HOST: db, POSTGRES_USER: bank, POSTGRES_DB: bank, AUTH_URL: "http://auth:8080"}
+    environment: {SERVICE_ROLE: core, DATABASE_HOST: db, POSTGRES_USER: bank, POSTGRES_DB: bank, AUTH_URL: "http://auth:8080", AUDIT_URL: "http://security:8080"}
     volumes: [secrets:/secrets:ro]
-    networks: [api-core, employee-core, core-auth, core-db, core-management]
-    depends_on:
-      db: {condition: service_healthy}
-      auth: {condition: service_healthy}
+    networks: [customer-backend, staff-core, core-db]
+    depends_on: {db: {condition: service_healthy}, auth: {condition: service_healthy}}
 
   customer:
     <<: *app
-    environment: {SERVICE_ROLE: customer, AUTH_URL: "http://auth:8080", CORE_URL: "http://core:8080"}
+    environment: {SERVICE_ROLE: customer, AUTH_URL: "http://auth:8080", CORE_URL: "http://core:8080", AUDIT_URL: "http://security:8080"}
     volumes: [secrets:/secrets:ro]
-    networks: [dmz-api, api-auth, api-core]
-    depends_on:
-      core: {condition: service_healthy}
+    networks: [dmz-api, customer-backend]
+    depends_on: {core: {condition: service_healthy}}
 
   employee:
     <<: *app
-    environment: {SERVICE_ROLE: employee, AUTH_URL: "http://auth:8080", CORE_URL: "http://core:8080"}
+    environment: {SERVICE_ROLE: employee, AUTH_URL: "http://auth:8080", CORE_URL: "http://core:8080", AUDIT_URL: "http://security:8080"}
     volumes: [secrets:/secrets:ro, employee-data:/data]
-    networks: [employee-net, employee-auth, employee-core]
-    depends_on:
-      core: {condition: service_healthy}
+    networks: [staff-net, staff-auth, staff-core]
+    depends_on: {core: {condition: service_healthy}}
+
+  office:
+    <<: *app
+    environment: {SERVICE_ROLE: office, AUTH_URL: "http://auth:8080", AUDIT_URL: "http://security:8080"}
+    volumes: [secrets:/secrets:ro, office-data:/data]
+    networks: [staff-net, staff-auth]
+    depends_on: {auth: {condition: service_healthy}}
 
   web:
     <<: *app
     command: [python, -m, uvicorn, services.gateway.app:app, --host, 0.0.0.0, --port, "8080"]
+    environment: {CUSTOMER_URL: "http://customer:8080"}
+    networks: [edge-web, dmz-api]
+    depends_on: {customer: {condition: service_healthy}}
+
+  firewall:
+    <<: *app
+    command: [python, -m, uvicorn, services.firewall.app:app, --host, 0.0.0.0, --port, "8080"]
+    environment: {WEB_URL: "http://web:8080", AUDIT_URL: "http://security:8080"}
     ports: ["127.0.0.1:${WEB_PORT:-8080}:8080"]
-    networks: [web-entry, customer-net, dmz-api]
-    depends_on:
-      customer: {condition: service_healthy}
-
-  events:
-    <<: *app
-    profiles: [load, test]
-    command: [python, -m, uvicorn, services.events.app:app, --host, 0.0.0.0, --port, "8080"]
-    volumes: [secrets:/secrets:ro, event-data:/data]
-    tmpfs: ["/tmp:size=8m,mode=1777", "/scratch:size=16m,uid=10001,gid=10001,mode=0700"]
-    networks: [event-net, management]
-    depends_on:
-      bootstrap: {condition: service_completed_successfully}
-
-  receiver:
-    <<: *app
-    profiles: [logs, test]
-    command: [python, -m, uvicorn, services.receiver.app:app, --host, 0.0.0.0, --port, "8080"]
-    volumes: [secrets:/secrets:ro, receiver-data:/data]
-    networks: [log-net, log-control]
-    depends_on:
-      bootstrap: {condition: service_completed_successfully}
-
-  manager:
-    <<: *app
-    profiles: [test, tools]
-    command: [python, -m, uvicorn, services.manager.app:app, --host, 0.0.0.0, --port, "8080"]
-    volumes: [secrets:/secrets:ro]
-    networks: [management, core-management, log-control]
-    depends_on:
-      bootstrap: {condition: service_completed_successfully}
-
-  customer-client:
-    <<: *idle
-    profiles: [test]
-    volumes: [secrets:/secrets:ro]
-    networks: [customer-net]
+    volumes: [secrets:/secrets:ro, ./config/edge-routes.json:/config/edge-routes.json:ro]
+    networks: [web-entry, edge-web]
+    depends_on: {web: {condition: service_healthy}, security: {condition: service_healthy}}
 
   employee-client:
-    <<: *idle
-    profiles: [test]
+    <<: *app
+    profiles: [tools]
+    command: [python, -c, "import time; time.sleep(2147483647)"]
     volumes: [secrets:/secrets:ro]
-    networks: [employee-net]
-
-  log-forwarder:
-    <<: *idle
-    profiles: [test, logs]
-    volumes: [secrets:/secrets:ro]
-    networks: [log-net]
-
-  load:
-    <<: *idle
-    profiles: [load]
-    volumes: [secrets:/secrets:ro, results-data:/results]
-    networks: [customer-net, employee-net, event-net]
-    mem_limit: 192m
-    memswap_limit: 192m
-    depends_on:
-      web: {condition: service_healthy}
-      employee: {condition: service_healthy}
-      events: {condition: service_healthy}
-
-  oom-probe:
-    <<: *idle
-    profiles: [fault]
-    restart: "no"
-    network_mode: none
-    mem_limit: 64m
-    memswap_limit: 64m
-    cpus: 0.25
-    pids_limit: 16
+    networks: [staff-net]
+    healthcheck: {disable: true}
 
 networks:
-  # A non-internal bridge is required for Docker's loopback port publishing.
-  # Only the fixed-route gateway joins it; workload clients remain internal.
   web-entry:
     driver: bridge
-    driver_opts:
-      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
-  customer-net: {internal: true}
-  dmz-api: {internal: true}
-  api-auth: {internal: true}
-  api-core: {internal: true}
-  employee-net: {internal: true}
-  employee-auth: {internal: true}
-  employee-core: {internal: true}
-  core-auth: {internal: true}
-  core-db: {internal: true}
-  core-management: {internal: true}
-  management: {internal: true}
-  log-net: {internal: true}
-  log-control: {internal: true}
-  event-net: {internal: true}
+    driver_opts: {com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"}
+    ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.1.0/28"}]}
+  edge-web: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.2.0/28"}]}}
+  dmz-api: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.3.0/28"}]}}
+  customer-backend: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.4.0/28"}]}}
+  staff-net: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.5.0/28"}]}}
+  staff-auth: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.6.0/28"}]}}
+  staff-core: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.7.0/28"}]}}
+  core-db: {internal: true, ipam: {config: [{subnet: "10.${NETWORK_OCTET:-240}.8.0/28"}]}}
 
 volumes:
   secrets:
   db-data:
   auth-data:
   employee-data:
-  receiver-data:
-  event-data:
-  results-data:
+  office-data:
+  security-data:

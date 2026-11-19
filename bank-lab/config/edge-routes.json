@@ -1,0 +1,9 @@
+[
+  {"method": "GET", "path_regex": "^/$"},
+  {"method": "POST", "path_regex": "^/login$"},
+  {"method": "POST", "path_regex": "^/logout$"},
+  {"method": "GET", "path_regex": "^/accounts$"},
+  {"method": "GET", "path_regex": "^/accounts/[A-Za-z0-9_-]{1,80}$"},
+  {"method": "GET", "path_regex": "^/accounts/[A-Za-z0-9_-]{1,80}/transactions$"},
+  {"method": "POST", "path_regex": "^/transfers$"}
+]

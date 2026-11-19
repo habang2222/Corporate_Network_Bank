@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 
 # Each test process uses its own synthetic secrets and SQLite directory.
-_workspace = tempfile.TemporaryDirectory(prefix="llooggeerr-boundaries-")
+_workspace = tempfile.TemporaryDirectory(prefix="company-bank-boundaries-")
 _root = Path(_workspace.name)
 (_root / "secrets").mkdir()
 (_root / "data").mkdir()
@@ -25,6 +25,7 @@ _service_key = secrets.token_urlsafe(32)
 (_root / "secrets" / "service-key").write_text(_service_key, encoding="utf-8")
 os.environ.update(SERVICE_ROLE="auth", DATA_DIR=str(_root / "data"),
                   SECRETS_DIR=str(_root / "secrets"))
+os.environ.pop("AUDIT_URL", None)
 
 from fastapi import HTTPException
 from fastapi.testclient import TestClient

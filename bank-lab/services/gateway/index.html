@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>llooggeerr 가상 은행</title>
+<title>가상 은행 회사망</title>
 <style>body{font:16px system-ui;max-width:850px;margin:60px auto;padding:0 24px;background:#0b1420;color:#e7edf5}h1{font-size:36px}section{background:#142337;padding:24px;border-radius:12px;margin:18px 0}input,button{padding:10px;margin:5px;border-radius:6px;border:1px solid #46617c}button{background:#61d6b5;color:#102821;cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#b9d4f0}small{color:#abc0d4}</style>
-<h1>llooggeerr 가상 은행</h1><p>모든 고객·계좌·금액은 시험용입니다. 실제 금융 거래를 수행하지 않습니다.</p>
-<section><h2>로그인</h2><input id="username" placeholder="테스트 계정 (alice / bob)"><input id="password" type="password" placeholder="생성된 시험 비밀번호"><button id="login">로그인</button><button id="logout">로그아웃</button><p><small>비밀번호 확인: python3 scripts/lab.py credentials</small></p></section>
+<h1>가상 은행 회사망</h1><p>모든 고객·계좌·금액은 시험용입니다. 실제 금융 거래를 수행하지 않습니다.</p>
+<section><h2>로그인</h2><input id="username" placeholder="테스트 계정 (alice / bob)"><input id="password" type="password" placeholder="생성된 시험 비밀번호"><button id="login">로그인</button><button id="logout">로그아웃</button><p><small>비밀번호 확인: docker compose exec auth cat /secrets/users.json</small></p></section>
 <section><h2>내 계좌</h2><button id="accounts">계좌·잔액 조회</button><input id="account" value="A001" aria-label="거래 내역 계좌"><button id="history">거래 내역</button></section>
 <section><h2>가상 이체</h2><input id="from" value="A001" aria-label="출금 계좌"><input id="to" value="A002" aria-label="입금 계좌"><input id="amount" type="number" min="1" value="100" aria-label="최소 화폐 단위 금액"><button id="transfer">이체</button><p><small>금액은 정수 최소 화폐 단위로 처리합니다.</small></p></section>
 <section><h2>처리 결과</h2><pre id="result" aria-live="polite">로그인 후 조회할 수 있습니다.</pre></section>

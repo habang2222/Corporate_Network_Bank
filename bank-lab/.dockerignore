@@ -3,4 +3,4 @@ results
 __pycache__
 **/__pycache__
 .pytest_cache
-docs/validation
+.venv

@@ -1,1 +1,0 @@
-{"name":"burst","description":"시간의 40~60% 구간에 기준 RPS의 5배 요청 목표","parameters":{"scenario":"burst","duration":20,"users":8,"rps":5,"failure_ratio":0.1,"seed":42}}

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import time
 from typing import Any
+from uuid import uuid4
 
 import httpx
 from fastapi import HTTPException, Request
@@ -23,8 +24,20 @@ def secret(name: str) -> str:
 
 
 def audit(event: str, **fields: Any) -> None:
-    print(json.dumps({"source": "application", "service": ROLE, "event": event,
-                      "time_ns": time.time_ns(), **CORRELATION.get(), **fields}, ensure_ascii=False), flush=True)
+    record = {"event_id": uuid4().hex, "source": "application", "service": ROLE,
+              "event": event, "time_ns": time.time_ns(), **CORRELATION.get(), **fields}
+    print(json.dumps(record, ensure_ascii=False), flush=True)
+    url = os.getenv("AUDIT_URL")
+    if url:
+        try:
+            response = httpx.post(url + "/events", json=record,
+                                  headers={"X-Service-Key": secret("service-key")},
+                                  timeout=0.5, trust_env=False)
+            response.raise_for_status()
+        except (httpx.HTTPError, OSError) as exc:
+            print(json.dumps({"source": "audit_delivery", "service": ROLE,
+                              "event_id": record["event_id"], "error": type(exc).__name__,
+                              "time_ns": time.time_ns()}), flush=True)
 
 
 def bearer(request: Request) -> str:

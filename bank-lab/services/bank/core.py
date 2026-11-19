@@ -64,6 +64,8 @@ def accounts(request: Request):
     with db() as connection:
         rows = connection.execute("SELECT * FROM accounts WHERE customer_id=%s ORDER BY account_id",
                                   (user["customer_id"],)).fetchall()
+        record(connection, user["username"], "accounts_read", "completed", {"count": len(rows)})
+    audit("accounts_read", username=user["username"], count=len(rows))
     return {"accounts": rows}
 
 
@@ -81,7 +83,10 @@ def owned_account(connection, account_id, user):
 def account(account_id: str, request: Request):
     user = customer(request)
     with db() as connection:
-        return owned_account(connection, account_id, user)
+        row = owned_account(connection, account_id, user)
+        record(connection, user["username"], "account_read", "completed", {"account_id": account_id})
+    audit("account_read", username=user["username"], account_id=account_id)
+    return row
 
 
 @router.get("/accounts/{account_id}/transactions")
@@ -94,6 +99,10 @@ def history(account_id: str, request: Request):
             created_at FROM transfers WHERE
             (from_account=%s AND username=%s) OR (to_account=%s AND status='completed')
             ORDER BY created_at DESC LIMIT 1000""", (account_id, user["username"], account_id)).fetchall()
+        record(connection, user["username"], "transactions_read", "completed",
+               {"account_id": account_id, "row_count": len(rows)})
+    audit("transactions_read", username=user["username"], account_id=account_id,
+          row_count=len(rows))
     return {"transactions": rows, "limit": 1000}
 
 
@@ -173,10 +182,13 @@ def customers(request: Request):
 
 @router.get("/report-data")
 def report_data(request: Request):
-    employee(request, {"teller", "auditor"})
+    user = employee(request, {"teller", "auditor"})
     with db() as connection:
         accounts = connection.execute("SELECT count(*) AS account_count,sum(balance_cents) AS total_balance_cents FROM accounts").fetchone()
         transfers = connection.execute("SELECT status,count(*) AS count FROM transfers GROUP BY status ORDER BY status").fetchall()
+        record(connection, user["username"], "report_data_read", "completed",
+               {"account_count": accounts["account_count"]})
+    audit("report_data_read", username=user["username"], account_count=accounts["account_count"])
     return {**accounts, "transfers": transfers, "synthetic_data": True}
 
 

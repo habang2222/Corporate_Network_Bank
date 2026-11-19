@@ -1,5 +1,4 @@
-# Copy to compose.override.yaml only when intentionally changing local capacity.
-# These are lab resource limits, not llooggeerr performance acceptance thresholds.
+# Copy to compose.override.yaml when intentionally changing local resource limits.
 services:
   core:
     cpus: 1.0

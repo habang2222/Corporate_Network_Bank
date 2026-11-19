@@ -1,4 +1,4 @@
-name: bank-lab integration
+name: company network
 on:
   push:
     paths: ["bank-lab/**", ".github/workflows/bank-lab.yml"]
@@ -16,19 +16,13 @@ jobs:
         working-directory: bank-lab
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scripts/lab.py doctor
       - run: docker compose config --quiet
-      - run: docker compose build bootstrap
-      - run: python3 scripts/lab.py test
+      - run: python3 -m compileall -q services scripts
+      - run: docker compose up -d --build
+      - run: docker compose exec -T firewall python scripts/smoke.py customer
+      - run: docker compose --profile tools up -d employee-client
+      - run: docker compose exec -T employee-client python scripts/smoke.py staff
+      - run: docker compose exec -T security python scripts/smoke.py audit
       - run: docker compose exec -T auth python -m unittest services.bank.test_boundaries -v
-      - run: docker compose exec -T load python -m unittest workloads.test_workloads services.receiver.test_receiver -v
-      - run: python3 scripts/lab.py simulate
       - if: always()
-        run: python3 scripts/lab.py report
-      - if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: bank-lab-results
-          path: bank-lab/results/
-      - if: always()
-        run: python3 scripts/lab.py down
+        run: docker compose down

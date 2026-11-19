@@ -3,5 +3,4 @@
 **/.env
 **/.venv/
 bank-lab/results/*
-!bank-lab/results/.gitkeep
 *.pyc

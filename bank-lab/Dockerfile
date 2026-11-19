@@ -4,8 +4,8 @@ WORKDIR /app
 COPY requirements.txt requirements.lock ./
 RUN pip install --no-cache-dir -r requirements.lock \
     && groupadd -g 10001 lab && useradd -u 10001 -g lab -M lab \
-    && mkdir -p /data /results /secrets /scratch \
-    && chown -R lab:lab /data /results /secrets /scratch
+    && mkdir -p /data /secrets \
+    && chown -R lab:lab /data /secrets
 COPY . /app
 USER 10001:10001
 CMD ["python", "-m", "uvicorn", "services.bank.app:app", "--host", "0.0.0.0", "--port", "8080"]
